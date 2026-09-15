@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Screen } from '@/components/ui/Screen';
 import { TextField } from '@/components/ui/TextField';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useApp } from '@/context/AppContext';
 import { personaCompleteness } from '@/lib/persona';
 
@@ -80,7 +80,7 @@ export default function ProfilePersonaScreen() {
 }
 
 const styles = StyleSheet.create({
-  meta: { ...typography.body, marginBottom: spacing.xs },
+  meta: { ...typography.body, marginBottom: spacing[4] },
   session: { ...typography.caption },
-  spacer: { height: spacing.lg },
+  spacer: { height: spacing[24] },
 });

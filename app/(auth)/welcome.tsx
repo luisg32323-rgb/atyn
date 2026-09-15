@@ -11,8 +11,8 @@ export default function WelcomeScreen() {
   return (
     <Screen title="ATYN" subtitle="Persona → Pursuits → Card" scroll>
       <Text style={styles.lead}>
-        Local-first v1. Demo mode works without Supabase keys. Auth below is stubbed for future
-        magic link + Apple Sign In.
+        Local-first. Demo mode works without Supabase keys. Auth below is stubbed for future magic
+        link + Apple Sign In.
       </Text>
 
       <View style={styles.stack}>
@@ -31,7 +31,7 @@ export default function WelcomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  lead: { ...typography.body, color: colors.textMuted, marginBottom: spacing.lg, lineHeight: 24 },
-  stack: { gap: spacing.sm },
-  footnote: { ...typography.caption, marginTop: spacing.lg },
+  lead: { ...typography.body, color: colors.textMuted, marginBottom: spacing[24], lineHeight: 24 },
+  stack: { gap: spacing[8] },
+  footnote: { ...typography.caption, marginTop: spacing[24] },
 });

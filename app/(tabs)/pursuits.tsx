@@ -5,15 +5,17 @@ import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Screen } from '@/components/ui/Screen';
+import { PacePill, TrendPill } from '@/components/ui/StatusPill';
 import { colors, spacing, typography } from '@/constants/theme';
 import { useApp } from '@/context/AppContext';
 import { pursuitActionCounts } from '@/lib/progress';
+import { pursuitTrajectory } from '@/lib/status';
 
 export default function PursuitsScreen() {
   const { pursuits } = useApp();
 
   return (
-    <Screen title="Pursuits" subtitle="Title, why, status, milestones" scroll>
+    <Screen title="Pursuits" subtitle="List, trajectory, evidence" scroll>
       <Link href="/pursuit/new" asChild>
         <Button title="New pursuit" />
       </Link>
@@ -27,6 +29,7 @@ export default function PursuitsScreen() {
         ) : (
           pursuits.map((p) => {
             const counts = pursuitActionCounts(p);
+            const traj = pursuitTrajectory(p);
             return (
               <Link key={p.id} href={`/pursuit/${p.id}`} asChild>
                 <Pressable>
@@ -38,6 +41,10 @@ export default function PursuitsScreen() {
                     <Text style={styles.why} numberOfLines={2}>
                       {p.why}
                     </Text>
+                    <View style={styles.pills}>
+                      <PacePill pace={traj.pace} />
+                      <TrendPill trend={traj.trend} />
+                    </View>
                     <ProgressBar completed={counts.completed} total={counts.total} />
                   </Card>
                 </Pressable>
@@ -51,17 +58,20 @@ export default function PursuitsScreen() {
 }
 
 const styles = StyleSheet.create({
-  list: { marginTop: spacing.md },
+  list: { marginTop: spacing[16] },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  title: { ...typography.h3, flex: 1, marginRight: spacing.sm },
+  title: { ...typography.heading, flex: 1, marginRight: spacing[8] },
   status: {
     ...typography.label,
     color: colors.accent,
     backgroundColor: colors.chip,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: spacing[8],
     paddingVertical: 4,
     borderRadius: 999,
     overflow: 'hidden',
+    textTransform: 'none',
+    letterSpacing: 0.3,
   },
-  why: { ...typography.caption, marginVertical: spacing.sm },
+  why: { ...typography.caption, marginVertical: spacing[8] },
+  pills: { flexDirection: 'row', gap: spacing[8], marginBottom: spacing[12] },
 });

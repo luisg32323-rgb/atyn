@@ -1,6 +1,18 @@
-# ATYN (Expo) — Persona → Pursuits → Card v1
+# ATYN (Expo) — Persona → Pursuits → Card
 
-Local-first Expo Router + TypeScript app. Dark UI via React Native `StyleSheet` (no NativeWind). Demo mode runs without Supabase keys.
+Local-first Expo Router + TypeScript app. **Design-aligned UI** (Claude Design tokens: Paper/Ink/Slate/Accent/Foil) via React Native `StyleSheet` — light Paper canvas, no dark scaffold, no NativeWind. Demo mode runs without Supabase keys.
+
+## Design
+
+| Token | Hex |
+|-------|-----|
+| Ink | `#1C1B19` |
+| Paper | `#F0EFEA` (app background) |
+| Slate | `#2A2823` |
+| Accent | `#4A6FA5` |
+| Foil | `#7E9CC4` |
+
+Type roles: Display / Numeral (mono scores) / Title / Heading / Body. Status labels: **Ahead / On track / Behind** and **Rising / Steady / Slipping**. Spacing scale: 4–32.
 
 ## v1 scope
 
@@ -8,19 +20,18 @@ Local-first Expo Router + TypeScript app. Dark UI via React Native `StyleSheet` 
 |------|----------|
 | **Auth** | Stubbed email magic link + Apple placeholders; **Continue in demo mode** for offline loop |
 | **Persona** | `role` + `becoming` required; completeness = filled/2 |
-| **Pursuit** | `title`, `why`, `status`, milestones with **checkable actions** |
-| **ATYN Card** | Shows role/becoming + evidence progress (`completed actions / total`); **Momentum hidden** |
-| **Progress tab** | Stub only |
+| **Today** | Momentum, this-week progress, priority actions, insight; complete/reschedule sheets |
+| **Pursuits** | List + detail with trajectory; AI draft accept/edit/reject stubs; evidence sheet stub |
+| **ATYN Card** | Name, OVR, six category stats, Share + How it works + Breakdown |
 | **Persistence** | AsyncStorage local-first |
-| **Out of scope** | Fake Coach inventing persona, NativeWind, Momentum, real Supabase (keys via `.env.example` later) |
+| **Out of scope** | Paywall, full Coach, separate 1a/1b/1c paths (Card tab is 2b) |
 
 ## Tabs
 
-1. **Today** — persona snapshot, active pursuits, next open actions  
-2. **Pursuits** — list / create / open detail  
-3. **Card** — ATYN Card v1  
-4. **Progress** — stub  
-5. **Persona** — edit role/becoming, sign out / reset local data  
+1. **Today** — momentum, week, priorities, insight  
+2. **Pursuits** — list / create / detail  
+3. **Card** — ATYN Card (2b)  
+4. **Persona** — edit role/becoming, sign out / reset local data  
 
 ## Run
 
@@ -31,7 +42,7 @@ npx expo start
 ```
 
 - Press `i` / `a` / `w` for iOS simulator, Android emulator, or web.  
-- First launch → **Continue in demo mode** → set Persona → add a Pursuit → check actions → see Card progress.
+- First launch → **Continue in demo mode** → set Persona → add a Pursuit → check actions → see Card OVR.
 
 Typecheck:
 

@@ -1,85 +1,153 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Link } from 'expo-router';
+import { useMemo } from 'react';
+import { Alert, Share, StyleSheet, Text, View } from 'react-native';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Screen } from '@/components/ui/Screen';
-import { colors, radius, spacing, typography } from '@/constants/theme';
+import { PacePill, TrendPill } from '@/components/ui/StatusPill';
+import { colors, fonts, radius, spacing, typography } from '@/constants/theme';
 import { useApp } from '@/context/AppContext';
-import { allPursuitsActionCounts, pursuitActionCounts } from '@/lib/progress';
+import { cardDisplayName, computeCategoryStats, computeOvr } from '@/lib/cardStats';
+import { momentumSummary } from '@/lib/status';
 
 export default function AtYnCardScreen() {
   const { persona, personaComplete, pursuits } = useApp();
-  const overall = allPursuitsActionCounts(pursuits);
+  const stats = useMemo(
+    () => computeCategoryStats(pursuits, persona),
+    [pursuits, persona],
+  );
+  const ovr = computeOvr(stats);
+  const name = cardDisplayName(persona);
+  const momentum = useMemo(() => momentumSummary(pursuits), [pursuits]);
 
-  return (
-    <Screen title="ATYN Card" subtitle="Role, becoming, evidence — no Momentum" scroll>
-      {!personaComplete ? (
+  const onShare = async () => {
+    try {
+      const lines = stats.map((s) => `${s.label} ${s.value}`).join(' · ');
+      await Share.share({
+        message: `ATYN Card — ${name}\nOVR ${ovr}\n${lines}\n${momentum.pace} · ${momentum.trend}`,
+      });
+    } catch {
+      Alert.alert('Share unavailable', 'Could not open the system share sheet.');
+    }
+  };
+
+  if (!personaComplete) {
+    return (
+      <Screen title="Card" subtitle="Name, OVR, six stats" scroll>
         <EmptyState
           title="Persona required"
-          body="Complete role + becoming on the Persona tab. The Card never invents persona data."
+          body="Complete role + becoming on the Persona tab. The Card never invents who you are."
         />
-      ) : (
-        <View style={styles.atynCard}>
+        <Link href="/(tabs)/profile" asChild>
+          <Button title="Go to Persona" />
+        </Link>
+      </Screen>
+    );
+  }
+
+  if (pursuits.length === 0) {
+    return (
+      <Screen title="Card" subtitle="Name, OVR, six stats" scroll>
+        <EmptyState
+          title="No evidence yet"
+          body="Add a pursuit and complete actions — categories fill from real work, not vibes."
+        />
+        <Link href="/pursuit/new" asChild>
+          <Button title="New pursuit" />
+        </Link>
+        <Link href="/card/how-it-works" asChild>
+          <Button title="How it works" variant="ghost" />
+        </Link>
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen title="Card" subtitle="Shareable identity score" scroll>
+      <View style={styles.atynCard}>
+        <View style={styles.cardTop}>
           <Text style={styles.brand}>ATYN</Text>
-          <Text style={styles.label}>ROLE</Text>
-          <Text style={styles.role}>{persona?.role}</Text>
-          <Text style={[styles.label, { marginTop: spacing.md }]}>BECOMING</Text>
-          <Text style={styles.becoming}>{persona?.becoming}</Text>
-
-          <View style={styles.divider} />
-
-          <ProgressBar
-            completed={overall.completed}
-            total={overall.total}
-            label="Evidence (actions completed)"
-          />
-          <Text style={styles.note}>
-            Progress is completed actions ÷ total actions across pursuits. Momentum is hidden in v1.
-          </Text>
+          <View style={styles.pillRow}>
+            <PacePill pace={momentum.pace} />
+            <TrendPill trend={momentum.trend} />
+          </View>
         </View>
-      )}
 
-      {personaComplete && pursuits.length > 0 ? (
-        <>
-          <Text style={styles.section}>By pursuit</Text>
-          {pursuits.map((p) => {
-            const c = pursuitActionCounts(p);
-            return (
-              <Card key={p.id}>
-                <Text style={styles.pursuitTitle}>{p.title}</Text>
-                <ProgressBar completed={c.completed} total={c.total} />
-              </Card>
-            );
-          })}
-        </>
-      ) : null}
+        <Text style={styles.label}>Name</Text>
+        <Text style={styles.name}>{name}</Text>
+        {persona?.becoming ? (
+          <Text style={styles.becoming}>{persona.becoming}</Text>
+        ) : null}
+
+        <View style={styles.ovrBlock}>
+          <Text style={styles.label}>OVR</Text>
+          <Text style={styles.ovr}>{ovr}</Text>
+        </View>
+
+        <View style={styles.statGrid}>
+          {stats.map((s) => (
+            <View key={s.key} style={styles.statCell}>
+              <Text style={styles.statValue}>{s.value}</Text>
+              <Text style={styles.statLabel}>{s.label}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.actions}>
+        <Button title="Share" onPress={onShare} />
+        <Link href="/card/how-it-works" asChild>
+          <Button title="How it works" variant="secondary" />
+        </Link>
+        <Link href="/card/breakdown" asChild>
+          <Button title="Breakdown" variant="ghost" />
+        </Link>
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   atynCard: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.accentDim,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
+    borderWidth: 1.5,
+    borderColor: colors.accent,
+    padding: spacing[24],
+    marginBottom: spacing[16],
   },
-  brand: {
-    ...typography.label,
-    color: colors.accent,
-    marginBottom: spacing.md,
+  cardTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing[16],
+    gap: spacing[8],
   },
+  brand: { ...typography.label, color: colors.accent },
+  pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[4], justifyContent: 'flex-end' },
   label: { ...typography.label },
-  role: { ...typography.h2, marginTop: spacing.xs },
-  becoming: { ...typography.body, marginTop: spacing.xs, color: colors.accent, lineHeight: 24 },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
-    marginVertical: spacing.lg,
+  name: { ...typography.title, marginTop: spacing[4] },
+  becoming: { ...typography.body, color: colors.foil, marginTop: spacing[4] },
+  ovrBlock: { marginTop: spacing[20], marginBottom: spacing[16] },
+  ovr: { ...typography.numeral, color: colors.accent, marginTop: spacing[4] },
+  statGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: -spacing[4],
   },
-  note: { ...typography.caption, marginTop: spacing.sm, lineHeight: 18 },
-  section: { ...typography.h3, marginBottom: spacing.sm },
-  pursuitTitle: { ...typography.h3, marginBottom: spacing.sm },
+  statCell: {
+    width: '33.33%',
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[12],
+    alignItems: 'center',
+  },
+  statValue: {
+    fontFamily: fonts.mono,
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.ink,
+  },
+  statLabel: { ...typography.label, marginTop: spacing[4], color: colors.textMuted },
+  actions: { gap: spacing[8] },
 });

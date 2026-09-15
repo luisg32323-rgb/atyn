@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
 import { TextField } from '@/components/ui/TextField';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useApp } from '@/context/AppContext';
 
 export default function EmailAuthScreen() {
@@ -13,7 +13,6 @@ export default function EmailAuthScreen() {
 
   const onSend = async () => {
     if (!email.trim()) return;
-    // Placeholder: real magic link would call Supabase auth.
     setSent(true);
     await stubEmailSignIn(email);
   };
@@ -41,6 +40,6 @@ export default function EmailAuthScreen() {
 }
 
 const styles = StyleSheet.create({
-  note: { ...typography.caption, marginBottom: spacing.md, lineHeight: 20 },
-  actions: { marginTop: spacing.sm },
+  note: { ...typography.caption, marginBottom: spacing[16], lineHeight: 20 },
+  actions: { marginTop: spacing[8] },
 });

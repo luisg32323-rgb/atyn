@@ -13,9 +13,9 @@ export function EmptyState({ title, body }: { title: string; body: string }) {
 
 const styles = StyleSheet.create({
   wrap: {
-    padding: spacing.lg,
+    padding: spacing[24],
     alignItems: 'center',
   },
-  title: { ...typography.h3, marginBottom: spacing.sm, textAlign: 'center' },
+  title: { ...typography.heading, marginBottom: spacing[8], textAlign: 'center' },
   body: { ...typography.caption, textAlign: 'center', color: colors.textMuted },
 });

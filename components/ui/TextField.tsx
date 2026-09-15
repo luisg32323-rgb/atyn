@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
-import { colors, radius, spacing, typography } from '@/constants/theme';
+import { colors, fonts, radius, spacing, typography } from '@/constants/theme';
 
 type Props = TextInputProps & {
   label: string;
@@ -10,7 +10,7 @@ type Props = TextInputProps & {
 export function TextField({ label, hint, style, ...rest }: Props) {
   return (
     <View style={styles.wrap}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
+      <Text style={styles.label}>{label}</Text>
       <TextInput
         placeholderTextColor={colors.textDim}
         style={[styles.input, style]}
@@ -22,17 +22,18 @@ export function TextField({ label, hint, style, ...rest }: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { marginBottom: spacing.md },
-  label: { ...typography.label, marginBottom: spacing.sm },
+  wrap: { marginBottom: spacing[16] },
+  label: { ...typography.label, marginBottom: spacing[8] },
   input: {
     backgroundColor: colors.inputBg,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.md,
-    color: colors.text,
+    color: colors.ink,
+    fontFamily: fonts.sans,
     fontSize: 16,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 12,
+    paddingHorizontal: spacing[16],
+    paddingVertical: spacing[12],
   },
-  hint: { ...typography.caption, marginTop: spacing.xs },
+  hint: { ...typography.caption, marginTop: spacing[4] },
 });

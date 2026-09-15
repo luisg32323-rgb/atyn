@@ -42,9 +42,9 @@ export function Screen({ title, subtitle, scroll, children, style, ...rest }: Pr
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
-  scrollContent: { flexGrow: 1, paddingBottom: spacing.xl },
-  inner: { flex: 1, paddingHorizontal: spacing.md, paddingTop: spacing.md },
-  title: { ...typography.title, marginBottom: spacing.xs },
-  subtitle: { ...typography.caption, marginBottom: spacing.md },
+  safe: { flex: 1, backgroundColor: colors.paper },
+  scrollContent: { flexGrow: 1, paddingBottom: spacing[32] },
+  inner: { flex: 1, paddingHorizontal: spacing[16], paddingTop: spacing[16] },
+  title: { ...typography.title, marginBottom: spacing[4] },
+  subtitle: { ...typography.caption, marginBottom: spacing[16] },
 });

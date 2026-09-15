@@ -22,8 +22,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerStyle: { backgroundColor: colors.surface },
-        headerTintColor: colors.text,
+        headerStyle: { backgroundColor: colors.paper },
+        headerTintColor: colors.ink,
         headerShadowVisible: false,
         tabBarStyle: {
           backgroundColor: colors.surface,
@@ -55,17 +55,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="progress"
-        options={{
-          title: 'Progress',
-          tabBarIcon: ({ color }) => <TabIcon name="line-chart" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           title: 'Persona',
           tabBarIcon: ({ color }) => <TabIcon name="user" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="progress"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

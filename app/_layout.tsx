@@ -1,5 +1,6 @@
-import { DarkTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -12,12 +13,12 @@ export { ErrorBoundary } from 'expo-router';
 SplashScreen.preventAutoHideAsync();
 
 const navTheme = {
-  ...DarkTheme,
+  ...DefaultTheme,
   colors: {
-    ...DarkTheme.colors,
-    background: colors.bg,
+    ...DefaultTheme.colors,
+    background: colors.paper,
     card: colors.surface,
-    text: colors.text,
+    text: colors.ink,
     border: colors.border,
     primary: colors.accent,
   },
@@ -40,7 +41,16 @@ function RootNavigator() {
 
   return (
     <ThemeProvider value={navTheme}>
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
+      <StatusBar style="dark" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.paper },
+          headerStyle: { backgroundColor: colors.paper },
+          headerTintColor: colors.ink,
+          headerShadowVisible: false,
+        }}
+      >
         <Stack.Screen name="index" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
@@ -51,6 +61,14 @@ function RootNavigator() {
         <Stack.Screen
           name="pursuit/[id]"
           options={{ headerShown: true, title: 'Pursuit' }}
+        />
+        <Stack.Screen
+          name="card/how-it-works"
+          options={{ headerShown: true, title: 'How it works', presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name="card/breakdown"
+          options={{ headerShown: true, title: 'Breakdown' }}
         />
       </Stack>
     </ThemeProvider>
@@ -68,7 +86,7 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   boot: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.paper,
     alignItems: 'center',
     justifyContent: 'center',
   },

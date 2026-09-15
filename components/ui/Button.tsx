@@ -6,7 +6,7 @@ import {
   Text,
   type PressableProps,
 } from 'react-native';
-import { colors, radius, spacing } from '@/constants/theme';
+import { colors, fonts, radius, spacing } from '@/constants/theme';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
@@ -34,7 +34,9 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, Props>(
         {...rest}
       >
         {loading ? (
-          <ActivityIndicator color={variant === 'primary' ? colors.bg : colors.accent} />
+          <ActivityIndicator
+            color={variant === 'primary' || variant === 'danger' ? colors.textOnAccent : colors.accent}
+          />
         ) : (
           <Text style={[styles.label, styles[`${variant}Label` as const]]}>{title}</Text>
         )}
@@ -46,7 +48,7 @@ export const Button = forwardRef<React.ElementRef<typeof Pressable>, Props>(
 const styles = StyleSheet.create({
   base: {
     paddingVertical: 14,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing[16],
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
@@ -54,17 +56,17 @@ const styles = StyleSheet.create({
   },
   primary: { backgroundColor: colors.accent },
   secondary: {
-    backgroundColor: colors.surfaceElevated,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderStrong,
   },
   ghost: { backgroundColor: 'transparent' },
   danger: { backgroundColor: colors.danger },
-  pressed: { opacity: 0.85 },
+  pressed: { opacity: 0.88 },
   disabled: { opacity: 0.45 },
-  label: { fontSize: 16, fontWeight: '600' },
-  primaryLabel: { color: colors.bg },
-  secondaryLabel: { color: colors.text },
+  label: { fontFamily: fonts.sans, fontSize: 16, fontWeight: '600' },
+  primaryLabel: { color: colors.textOnAccent },
+  secondaryLabel: { color: colors.ink },
   ghostLabel: { color: colors.accent },
-  dangerLabel: { color: colors.bg },
+  dangerLabel: { color: colors.textOnAccent },
 });

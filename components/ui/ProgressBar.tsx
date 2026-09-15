@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, radius, spacing, typography } from '@/constants/theme';
+import { colors, fonts, radius, spacing, typography } from '@/constants/theme';
 import { progressRatio } from '@/lib/progress';
 
 type Props = {
@@ -14,7 +14,7 @@ export function ProgressBar({ completed, total, label }: Props) {
   return (
     <View>
       <View style={styles.row}>
-        <Text style={styles.label}>{label ?? 'Evidence progress'}</Text>
+        <Text style={styles.label}>{label ?? 'Progress'}</Text>
         <Text style={styles.count}>
           {completed}/{total}
         </Text>
@@ -30,10 +30,15 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    marginBottom: spacing[8],
   },
   label: { ...typography.caption },
-  count: { ...typography.caption, color: colors.accent },
+  count: {
+    fontFamily: fonts.mono,
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.accent,
+  },
   track: {
     height: 8,
     borderRadius: radius.sm,
